@@ -1,7 +1,9 @@
 # JWT Examples
 
-The thing that tripped me up was that you have to turn your id.pub
-into an id.pem file.
+```
+./build.sh
+npm test
+```
 
 ```
 $ ssh-keygen -t rsa -b 4096 -C "junk@id.rsa"
