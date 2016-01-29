@@ -1,0 +1,18 @@
+{
+  "name": "jwt-example",
+  "scripts": {
+    "test": "node_modules/mocha/bin/mocha"
+  },
+  "devDependencies": {
+    "jsonwebtoken": "5.5.4",
+    "mocha": "2.3.4"
+  },
+  "jshintConfig": {
+    "node": true,
+    "esversion": 6,
+    "predef": [
+      "describe",
+      "it"
+    ]
+  }
+}
