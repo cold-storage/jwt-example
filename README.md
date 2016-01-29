@@ -5,6 +5,8 @@
 npm test
 ```
 
+So to use public private key you generate a keypair as normal.
+
 ```
 $ ssh-keygen -t rsa -b 4096 -C "junk@id.rsa"
 ```
