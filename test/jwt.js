@@ -4,6 +4,7 @@
 
 const assert = require('assert');
 const jwt = require('jsonwebtoken');
+const jws = require('jws');
 const fs = require('fs');
 // $ ssh-keygen -t rsa -b 4096 -C "junk@id.rsa"
 //
@@ -33,27 +34,6 @@ describe('JSON Web Tokens', function() {
     let token = jwt.sign(user, secret, {
       notBefore: 1,
       expiresIn: 2
-    });
-
-    let atoken = jwt.sign(user, priv, {
-      algorithm: 'RS256'
-    });
-
-    it('should verify with public key when signed with private key', (done) => {
-      jwt.verify(atoken, pub, {
-        algorithm: 'RS256'
-      }, (err, ua) => {
-        if (err) {
-          done(err);
-        } else {
-          assert.equal(ua.name, user.name);
-          assert.equal(ua.email, user.email);
-          assert.equal(ua.roles[0], user.roles[0]);
-          assert.equal(ua.roles[1], user.roles[1]);
-          assert.equal(ua.roles[2], user.roles[2]);
-          done();
-        }
-      });
     });
 
     it('verify should error "not active" before 1 second', () => {
@@ -87,5 +67,38 @@ describe('JSON Web Tokens', function() {
       }, 1010);
     });
 
+    let atoken = jwt.sign(user, priv, {
+      algorithm: 'RS256'
+    });
+
+    it('should verify with public key when signed with private key', (done) => {
+      jwt.verify(atoken, pub, {
+        algorithm: 'RS256'
+      }, (err, ua) => {
+        if (err) {
+          done(err);
+        } else {
+          assert.equal(ua.name, user.name);
+          assert.equal(ua.email, user.email);
+          assert.equal(ua.roles[0], user.roles[0]);
+          assert.equal(ua.roles[1], user.roles[1]);
+          assert.equal(ua.roles[2], user.roles[2]);
+          done();
+        }
+      });
+    });
+
+    it.only('should match', () => {
+      const signature = jws.sign({
+        header: {"alg":"HS256"},
+        payload: {"":""},
+        secret: 'a',
+      });
+      const sig2 = jwt.sign({"":""}, 'a', {algorithm: 'HS256'});
+      console.log(signature);
+      console.log(sig2);
+      console.log(jws.decode(sig2));
+      assert.equal(signature, sig2);
+    });
   });
 });
